@@ -1,6 +1,9 @@
 # Description
 
-This repository is meant to serve as a general template for how to set up new repositories in the JogetOSS organization. 
+Form Update Process Tool Datalist Action allows one to perform any of these functions for selected records in datalist.
+1. Perform form data update and/or
+2. Trigger process tool and/or
+3. Trigger datalist action. 
 
 # Getting Help
 
