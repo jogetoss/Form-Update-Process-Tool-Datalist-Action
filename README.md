@@ -5,6 +5,8 @@ Form Update Process Tool Datalist Action allows one to perform any of these func
 2. Trigger process tool and/or
 3. Trigger datalist action. 
 
+![screenshot](https://user-images.githubusercontent.com/70784722/138264453-f20d33b5-f5f8-4737-98c2-d1970daca5f4.png)
+
 # Getting Help
 
 JogetOSS is a community-led team for open source software related to the [Joget](https://www.joget.org) no-code/low-code application platform.
