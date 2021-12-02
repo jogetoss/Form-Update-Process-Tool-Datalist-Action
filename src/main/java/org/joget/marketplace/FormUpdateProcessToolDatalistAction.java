@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.joget.apps.app.dao.FormDefinitionDao;
@@ -48,15 +46,18 @@ import org.json.JSONObject;
 public class FormUpdateProcessToolDatalistAction extends DataListActionDefault implements DataListPluginExtend{
     private final static String MESSAGE_PATH = "messages/FormUpdateProcessToolDatalistAction";
  
+    @Override
     public String getName() {
         //support i18n
         return AppPluginUtil.getMessage("org.joget.marketplace.FormUpdateProcessToolDatalistAction.name", getClassName(), MESSAGE_PATH);
     }
 
+    @Override
     public String getVersion() {
-        return "7.0.0";
+        return "7.0.1";
     }
 
+    @Override
     public String getClassName() {
         return getClass().getName();
     }
@@ -66,11 +67,13 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         return AppPluginUtil.getMessage("org.joget.marketplace.FormUpdateProcessToolDatalistAction.name", getClassName(), MESSAGE_PATH);
     }
     
+    @Override
     public String getDescription() {
         //support i18n
         return AppPluginUtil.getMessage("org.joget.marketplace.FormUpdateProcessToolDatalistAction.desc", getClassName(), MESSAGE_PATH);
     }
 
+    @Override
     public String getPropertyOptions() {
         AppDefinition appDef = AppUtil.getCurrentAppDefinition();
         String appId = appDef.getId();
@@ -86,26 +89,32 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         return "<i class=\"fas fa-tools\"></i>";
     }
 
+    @Override
     public String getLinkLabel() {
         return getPropertyString("label"); //get label from configured properties options
     }
 
+    @Override
     public String getHref() {
         return getPropertyString("href"); //Let system to handle to post to the same page
     }
-
+    
+    @Override
     public String getTarget() {
-        return getPropertyString("target");  //Let system to set the parameter to the checkbox name
+        return "post";
     }
-
+    
+    @Override
     public String getHrefParam() {
         return getPropertyString("hrefParam");  //Let system to set the parameter to the checkbox name
     }
 
+    @Override
     public String getHrefColumn() {
         return getPropertyString("hrefColumn"); //Let system to set the primary key column of the binder
     }
 
+    @Override
     public String getConfirmation() {
         return getPropertyString("confirmation"); //get confirmation from configured properties options
     }
@@ -119,7 +128,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         result.setType(DataListActionResult.TYPE_REDIRECT);
         result.setUrl("REFERER");
         
-        // only allow POST
+        // only allow POST to cater to form submission
         final HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
             return result;
@@ -147,8 +156,8 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
                 if (recordId != null && !recordId.isEmpty()) {
                     
-                    //save form data
-                    if (form != null && form.getStoreBinder() != null) {
+                    //save form data - only works when datalist action is in bulk action
+                    if (form != null && form.getStoreBinder() != null && formDataJson != null) {
                         String formDataRecordId = appService.getOriginProcessId(recordId);
                         FormData formData = getFormData(formDataJson, formDataRecordId, null, form);
                         if (formData != null) {
@@ -178,13 +187,17 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
                                         propertiesMap.putAll(AppPluginUtil.getDefaultProperties((Plugin) p, (Map) fvMap.get("properties"), appDef, wfAssignment));
                                         
                                         //replace recordID inside the plugin's properties
-                                        Map propertiesMapWithRecordID = replaceValueHashMap(propertiesMap, "", wfAssignment);
+                                        Map propertiesMapWithRecordID = replaceValueHashMap(propertiesMap, recordId, wfAssignment);
                                         
                                         if(debugMode){
                                             LogUtil.info(getClass().getName(), "Executing tool: " + className);
                                         }
                                         
                                         ApplicationPlugin appPlugin = (ApplicationPlugin) p;
+
+                                        propertiesMapWithRecordID.put("workflowAssignment", wfAssignment);
+                                        propertiesMapWithRecordID.put("appDef", appDef);
+                                        propertiesMapWithRecordID.put("pluginManager", pluginManager);
 
                                         if (appPlugin instanceof PropertyEditable) {
                                             ((PropertyEditable) appPlugin).setProperties(propertiesMapWithRecordID);

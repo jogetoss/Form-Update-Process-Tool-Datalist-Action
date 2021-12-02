@@ -16,12 +16,6 @@
             "type":"textfield"
          },
          {
-            "name":"popupFormId",
-            "label":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm@@",
-            "type":"selectbox",
-            "options_ajax":"[CONTEXT_PATH]/web/json/console/app[APP_PATH]/forms/options"
-         },
-         {
             "name":"htmlScript",
             "label":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.configureHTML@@",
             "type":"codeeditor",
@@ -29,22 +23,55 @@
             "mode":"html"
          },
          {
+            "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm@@",
+            "type" : "header",
+            "description" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm.desc@@"
+         },
+         {
+            "name":"popupFormId",
+            "label":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm@@",
+            "type":"selectbox",
+            "options_ajax":"[CONTEXT_PATH]/web/json/console/app[APP_PATH]/forms/options",
+            "description":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm.desc@@"
+         },
+         {
+            "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool@@",
+            "type" : "header",
+            "description" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool.desc@@"
+         },
+         {
             "name":   "processTool",
             "label": "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool@@",
-            "description" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool.desc@@",
             "type": "elementselect",
             "options_ajax": "[CONTEXT_PATH]/web/property/json/getElements?classname=org.joget.plugin.base.ApplicationPlugin",
             "url": "[CONTEXT_PATH]/web/property/json[APP_PATH]/getPropertyOptions",
             "default_property_values_url": "[CONTEXT_PATH]/web/property/json[APP_PATH]/getDefaultProperties"
          },
          {
+             "name" : "delay",
+             "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.delay@@",
+             "type":"textfield",
+             "value":"0",
+             "description":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.delay.desc@@",
+             "required":"true",
+             "regex_validation" : "^[0-9]+$"
+         },
+         {
+            "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.additionalDatalistAction@@",
+            "type" : "header",
+            "description": "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.additionalDatalistAction.desc@@"
+         },
+         {
             "name":   "additionalDataListAction",
             "label": "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.additionalDatalistAction@@",
-            "description": "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.additionalDatalistAction.desc@@",
             "type": "elementselect",
             "options_ajax": "[CONTEXT_PATH]/web/property/json/getElements?classname=org.joget.apps.datalist.model.DataListAction",
             "url": "[CONTEXT_PATH]/web/property/json[APP_PATH]/getPropertyOptions",
             "default_property_values_url": "[CONTEXT_PATH]/web/property/json[APP_PATH]/getDefaultProperties"
+         },
+         {
+            "label" : "@@app.jsontool.debugMode@@",
+            "type" : "header"
          },
          {
             "name" : "debug",
@@ -57,15 +84,6 @@
                 "value" : "true",
                 "label" : "True"
             }]
-         },
-         {
-             "name" : "delay",
-             "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.delay@@",
-             "type":"textfield",
-             "value":"0",
-             "description":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.delay.desc@@",
-             "required":"true",
-             "regex_validation" : "^[0-9]+$"
          }
       ]
    }
