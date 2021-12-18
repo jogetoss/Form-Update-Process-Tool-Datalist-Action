@@ -54,7 +54,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.1";
+        return "7.0.2";
     }
 
     @Override
@@ -273,12 +273,13 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         Form form = FormUpdateProcessToolDatalistAction.getForm(getPropertyString("popupFormId"));
         if (form != null) {
             dataModel.put("buttonLabel", StringUtil.escapeString(ResourceBundleUtil.getMessage("form.button.submit"), StringUtil.TYPE_HTML, null));
-            dataModel.put("json", StringUtil.escapeString(getSelectedFormJson(form), StringUtil.TYPE_HTML, null));
-            
+            String elJson = SecurityUtil.encrypt(StringUtil.escapeString(getSelectedFormJson(form), StringUtil.TYPE_HTML, null));
+            dataModel.put("json", elJson);
+                                
             AppDefinition appDef = AppUtil.getCurrentAppDefinition();
             dataModel.put("appDef", AppUtil.getCurrentAppDefinition());
             
-            String nonceForm = SecurityUtil.generateNonce(new String[]{"EmbedForm", appDef.getAppId(), appDef.getVersion().toString(), getPropertyString("popupFormId")}, 1);
+            String nonceForm = SecurityUtil.generateNonce(new String[]{"EmbedForm", appDef.getAppId(), appDef.getVersion().toString(), elJson}, 1);
             dataModel.put("nonceForm", nonceForm);
             
             return pluginManager.getPluginFreeMarkerTemplate(dataModel, "org.joget.marketplace.FormUpdateProcessToolDatalistAction", "/templates/FormUpdateProcessToolDatalistActionWithForm.ftl", null);
