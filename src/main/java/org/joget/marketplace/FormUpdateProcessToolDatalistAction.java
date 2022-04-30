@@ -29,7 +29,6 @@ import org.joget.apps.form.service.FormService;
 import org.joget.apps.form.service.FormUtil;
 import org.joget.commons.util.FileManager;
 import org.joget.commons.util.LogUtil;
-import org.joget.commons.util.PluginThread;
 import org.joget.commons.util.ResourceBundleUtil;
 import org.joget.commons.util.SecurityUtil;
 import org.joget.commons.util.StringUtil;
@@ -54,7 +53,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.2";
+        return "7.0.3";
     }
 
     @Override
@@ -131,7 +130,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         // only allow POST to cater to form submission
         final HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
-            return result;
+                return result;
         }
         
         // check for submited rows
@@ -155,7 +154,6 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
                 }
 
                 if (recordId != null && !recordId.isEmpty()) {
-                    
                     //save form data - only works when datalist action is in bulk action
                     if (form != null && form.getStoreBinder() != null && formDataJson != null) {
                         String formDataRecordId = appService.getOriginProcessId(recordId);
@@ -165,57 +163,52 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
                         }
                     }
                     
-                    //execute plugin
-                    if (objProcessTool != null){
-                        new PluginThread(new Runnable() {
-                            public void run() {
-                                AppUtil.setCurrentAppDefinition(appDef);
+                    if (objProcessTool != null && objProcessTool instanceof Map) {
+                        Map fvMap = (Map) objProcessTool;
+                        if (fvMap != null && fvMap.containsKey("className") && !fvMap.get("className").toString().isEmpty()) {
+                            String className = fvMap.get("className").toString();
+                            ApplicationPlugin p = (ApplicationPlugin)pluginManager.getPlugin(className);
+                            Map propertiesMap = (Map) fvMap.get("properties");
 
-                                if (objProcessTool != null && objProcessTool instanceof Map) {
-                                    Map fvMap = (Map) objProcessTool;
-                                    if (fvMap != null && fvMap.containsKey("className") && !fvMap.get("className").toString().isEmpty()) {
-                                        String className = fvMap.get("className").toString();
-                                        ApplicationPlugin p = (ApplicationPlugin)pluginManager.getPlugin(className);
-                                        Map propertiesMap = (Map) fvMap.get("properties");
-                                        
-                                        //create mock assignment
-                                        WorkflowAssignment wfAssignment = null;
-                                        wfAssignment = new WorkflowAssignment();
-                                        wfAssignment.setProcessId(recordId);
-                                        
-                                        //obtain plugin defaults
-                                        propertiesMap.putAll(AppPluginUtil.getDefaultProperties((Plugin) p, (Map) fvMap.get("properties"), appDef, wfAssignment));
-                                        
-                                        //replace recordID inside the plugin's properties
-                                        Map propertiesMapWithRecordID = replaceValueHashMap(propertiesMap, recordId, wfAssignment);
-                                        
-                                        if(debugMode){
-                                            LogUtil.info(getClass().getName(), "Executing tool: " + className);
-                                        }
-                                        
-                                        ApplicationPlugin appPlugin = (ApplicationPlugin) p;
+                            //create mock assignment
+                            WorkflowAssignment wfAssignment = null;
+                            wfAssignment = new WorkflowAssignment();
+                            wfAssignment.setProcessId(recordId);
 
-                                        propertiesMapWithRecordID.put("workflowAssignment", wfAssignment);
-                                        propertiesMapWithRecordID.put("appDef", appDef);
-                                        propertiesMapWithRecordID.put("pluginManager", pluginManager);
+                            //obtain plugin defaults
+                            propertiesMap.putAll(AppPluginUtil.getDefaultProperties((Plugin) p, (Map) fvMap.get("properties"), appDef, wfAssignment));
 
-                                        if (appPlugin instanceof PropertyEditable) {
-                                            ((PropertyEditable) appPlugin).setProperties(propertiesMapWithRecordID);
-                                        }
-                                        
-                                        Object result = appPlugin.execute(propertiesMapWithRecordID);
+                            //replace recordID inside the plugin's properties
+                            Map propertiesMapWithRecordID = replaceValueHashMap(propertiesMap, recordId, wfAssignment);
 
-                                        if(debugMode){
-                                            if(result != null){
-                                                LogUtil.info(getClass().getName(), "Executed tool: " + className + " - " + result.toString());
-                                            }else{
-                                                LogUtil.info(getClass().getName(), "Executed tool: " + className);
-                                            }
-                                        }
-                                    }
+                            if(debugMode){
+                                LogUtil.info(getClass().getName(), "Executing tool: " + className);
+                            }
+
+                            ApplicationPlugin appPlugin = (ApplicationPlugin) p;
+
+                            propertiesMapWithRecordID.put("workflowAssignment", wfAssignment);
+                            propertiesMapWithRecordID.put("appDef", appDef);
+                            propertiesMapWithRecordID.put("pluginManager", pluginManager);
+
+                            if(request != null){
+                                propertiesMapWithRecordID.put("request", request);
+                            }
+
+                            if (appPlugin instanceof PropertyEditable) {
+                                ((PropertyEditable) appPlugin).setProperties(propertiesMapWithRecordID);
+                            }
+
+                            Object resultPlugin = appPlugin.execute(propertiesMapWithRecordID);
+
+                            if(debugMode){
+                                if(resultPlugin != null){
+                                    LogUtil.info(getClass().getName(), "Executed tool: " + className + " - " + resultPlugin.toString());
+                                }else{
+                                    LogUtil.info(getClass().getName(), "Executed tool: " + className);
                                 }
                             }
-                        }).start();
+                        }
                     }
 
                     if(delay > 0){
