@@ -53,7 +53,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.3";
+        return "7.0.4";
     }
 
     @Override
@@ -128,26 +128,26 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         result.setUrl("REFERER");
         
         // only allow POST to cater to form submission
-        final HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
+        HttpServletRequest request = WorkflowUtil.getHttpServletRequest();
         if (request != null && !"POST".equalsIgnoreCase(request.getMethod())) {
-                return result;
+            return result;
         }
         
         // check for submited rows
-        final AppDefinition appDef = AppUtil.getCurrentAppDefinition();
-        final boolean debugMode = Boolean.parseBoolean((String)getProperty("debug"));
-        final PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
+        AppDefinition appDef = AppUtil.getCurrentAppDefinition();
+        boolean debugMode = Boolean.parseBoolean((String)getProperty("debug"));
+        PluginManager pluginManager = (PluginManager) AppUtil.getApplicationContext().getBean("pluginManager");
         String formDataJson = WorkflowUtil.getHttpServletRequest().getParameter("bulkcompleteformdata");
         Form form = getForm(getPropertyString("popupFormId"));
         int delay = Integer.parseInt((String)getProperty("delay"));
-        final Object objProcessTool = getProperty("processTool");
+        Object objProcessTool = getProperty("processTool");
         
         //iterate thru rowKeys
         int recordCount = 0;
         if (rowKeys != null && rowKeys.length > 0) {
             for(String recordIdObj : rowKeys){
                 recordCount++;
-                final String recordId = recordIdObj;
+                String recordId = recordIdObj;
                 
                 if(debugMode){
                     LogUtil.info(getClass().getName(), "Iterating item " + recordCount + " - Record " + recordId);
