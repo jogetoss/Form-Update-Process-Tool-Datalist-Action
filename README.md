@@ -7,6 +7,8 @@ Form Update Process Tool Datalist Action allows one to perform any of these func
 
 ![screenshot](https://user-images.githubusercontent.com/70784722/138264453-f20d33b5-f5f8-4737-98c2-d1970daca5f4.png)
 
+[Read documentation](https://dev.joget.org/community/display/marketplace/Form+Update+Process+Tool+Datalist+Action)
+
 # Getting Help
 
 JogetOSS is a community-led team for open source software related to the [Joget](https://www.joget.org) no-code/low-code application platform.
