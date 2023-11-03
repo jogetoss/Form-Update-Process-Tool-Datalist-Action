@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.joget.apps.app.dao.FormDefinitionDao;
 import org.joget.apps.app.model.AppDefinition;
 import org.joget.apps.app.model.FormDefinition;
@@ -266,7 +267,8 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
         Form form = FormUpdateProcessToolDatalistAction.getForm(getPropertyString("popupFormId"));
         if (form != null) {
             dataModel.put("buttonLabel", StringUtil.escapeString(ResourceBundleUtil.getMessage("form.button.submit"), StringUtil.TYPE_HTML, null));
-            String elJson = SecurityUtil.encrypt(StringUtil.escapeString(getSelectedFormJson(form), StringUtil.TYPE_HTML, null));
+            String elJson = StringEscapeUtils.escapeHtml(getSelectedFormJson(form));
+            
             dataModel.put("json", elJson);
                                 
             AppDefinition appDef = AppUtil.getCurrentAppDefinition();
