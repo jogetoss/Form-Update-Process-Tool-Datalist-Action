@@ -54,7 +54,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.4";
+        return "7.0.5";
     }
 
     @Override
