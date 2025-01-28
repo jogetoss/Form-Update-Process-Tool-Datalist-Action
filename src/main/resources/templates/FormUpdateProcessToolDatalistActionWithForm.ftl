@@ -16,7 +16,6 @@ ${htmlScript}
         $(button).closest("form").submit();
     }
     $(document).ready(function() {
-        $(document).ready(function() {
             $('button[value="${element.properties.id}"]').off("click");
             $('button[value="${element.properties.id}"]').on("click", function(e){
             
@@ -41,6 +40,6 @@ ${htmlScript}
                     return false;
                 }
             });
-        });
+        
     });
 </script>

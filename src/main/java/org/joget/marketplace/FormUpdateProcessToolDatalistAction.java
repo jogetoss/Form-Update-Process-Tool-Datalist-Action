@@ -54,7 +54,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.5";
+        return "7.0.6";
     }
 
     @Override
@@ -149,7 +149,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
             for(String recordIdObj : rowKeys){
                 recordCount++;
                 String recordId = recordIdObj;
-                
+
                 if(debugMode){
                     LogUtil.info(getClass().getName(), "Iterating item " + recordCount + " - Record " + recordId);
                 }
