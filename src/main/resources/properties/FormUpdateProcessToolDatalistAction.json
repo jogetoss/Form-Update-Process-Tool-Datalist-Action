@@ -35,6 +35,17 @@
             "description":"@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupForm.desc@@"
          },
          {
+            "name": "popupFormPostProcessing",
+            "label": "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.popupFormPostProcessing@@",
+            "type": "checkbox",
+            "options": [
+               {
+                  "value": "true",
+                  "label": ""
+               }
+            ]
+         },
+         {
             "label" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool@@",
             "type" : "header",
             "description" : "@@org.joget.marketplace.FormUpdateProcessToolDatalistAction.processTool.desc@@"

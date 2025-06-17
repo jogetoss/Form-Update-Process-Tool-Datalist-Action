@@ -54,7 +54,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.6";
+        return "7.0.7";
     }
 
     @Override
@@ -161,6 +161,10 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
                         FormData formData = getFormData(formDataJson, formDataRecordId, null, form);
                         if (formData != null) {
                             formService.recursiveExecuteFormStoreBinders(form, form, formData);
+                            
+                            if ("true".equalsIgnoreCase(getPropertyString("popupFormPostProcessing"))) {
+                                FormUtil.executePostFormSubmissionProccessor(form, formData);
+                            }
                         }
                     }
                     

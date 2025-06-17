@@ -16,22 +16,23 @@ ${htmlScript}
         $(button).closest("form").submit();
     }
     $(document).ready(function() {
-            $('button[value="${element.properties.id}"]').off("click");
-            $('button[value="${element.properties.id}"]').on("click", function(e){
-            
+        $(document).on("click", 'button[value="${element.properties.id}"]', function(e) { 
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
 
                 var button = $(this);
-                var table = $(button).closest("form").find('table');
 
-                if ($(table).find("input[type=checkbox][name|=d]:checked, input[type=radio][name|=d]:checked").length > 0) {
-                    var params = {
-                        _json : $("#${element.properties.id}_div").find("#json").val(),
-                        _callback : "bulk_complete_assignment_${element.properties.id}",
-                        _setting : "{}",
-                        _nonce : $("#${element.properties.id}_div").find("#nonce").val()
+                setTimeout(function() {
+                    const form = button.closest("form");
+                    const checkedInputs = form.find("input[type=checkbox][name|=d]:checked, input[type=radio][name|=d]:checked");
+
+                    if (checkedInputs.length > 0) {
+                        var params = {
+                            _json : $("#${element.properties.id}_div").find("#json").val(),
+                            _callback : "bulk_complete_assignment_${element.properties.id}",
+                            _setting : "{}",
+                            _nonce : $("#${element.properties.id}_div").find("#nonce").val()
                     };
 
                     JPopup.show("bulkCompleteForm", $("#${element.properties.id}_div").find("#formUrl").val(), params, "", "90%", "90%");
@@ -39,7 +40,7 @@ ${htmlScript}
                     alert("@@dbuilder.alert.noRecordSelected@@");
                     return false;
                 }
-            });
-        
+            }, 1000);
+        });
     });
 </script>
