@@ -54,7 +54,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
 
     @Override
     public String getVersion() {
-        return "7.0.7";
+        return "7.0.8";
     }
 
     @Override
@@ -193,6 +193,7 @@ public class FormUpdateProcessToolDatalistAction extends DataListActionDefault i
                             ApplicationPlugin appPlugin = (ApplicationPlugin) p;
 
                             propertiesMapWithRecordID.put("workflowAssignment", wfAssignment);
+                            propertiesMapWithRecordID.put("recordId", recordId);
                             propertiesMapWithRecordID.put("appDef", appDef);
                             propertiesMapWithRecordID.put("pluginManager", pluginManager);
 
